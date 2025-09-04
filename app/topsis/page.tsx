@@ -223,12 +223,31 @@ export default function TOPSISPage() {
               }
             }
 
-            // 3. Kısmi eşleşme ara (kriter ismi ile)
+            // 3. Normalize edilmiş eşleşme ara (boşlukları kaldırarak)
+            if (!matchingKey) {
+              const normalizedCriterion = criterion.name.replace(/\s+/g, '').toLowerCase()
+              matchingKey = excelKeys.find((key) => 
+                key.replace(/\s+/g, '').toLowerCase() === normalizedCriterion
+              )
+            }
+
+            // 4. Excel aliases ile normalize edilmiş eşleşme ara
+            if (!matchingKey && criterion.excelAliases) {
+              for (const alias of criterion.excelAliases) {
+                const normalizedAlias = alias.replace(/\s+/g, '').toLowerCase()
+                matchingKey = excelKeys.find((key) => 
+                  key.replace(/\s+/g, '').toLowerCase() === normalizedAlias
+                )
+                if (matchingKey) break
+              }
+            }
+
+            // 5. Kısmi eşleşme ara (kriter ismi ile)
             if (!matchingKey) {
               matchingKey = excelKeys.find((key) => key.toLowerCase().includes(criterion.name.toLowerCase()))
             }
 
-            // 4. Excel aliases ile kısmi eşleşme ara
+            // 6. Excel aliases ile kısmi eşleşme ara
             if (!matchingKey && criterion.excelAliases) {
               for (const alias of criterion.excelAliases) {
                 matchingKey = excelKeys.find((key) => key.toLowerCase().includes(alias.toLowerCase()))
@@ -245,6 +264,22 @@ export default function TOPSISPage() {
               if (driverIndex === 0) {
                 console.log(`❌ ${criterion.name} için sütun bulunamadı!`)
                 console.log(`🔍 Aranan aliases:`, criterion.excelAliases || [])
+                console.log(`🔍 Mevcut Excel sütunları:`, excelKeys)
+                
+                // Disiplin kriterleri için özel debug
+                if (criterion.name.includes('Disiplin')) {
+                  console.log(`🔍 Disiplin kriteri debug:`)
+                  console.log(`  - Kriter ismi: "${criterion.name}"`)
+                  console.log(`  - Kriter ismi uzunluğu: ${criterion.name.length}`)
+                  console.log(`  - Excel sütunları içinde arama:`)
+                  excelKeys.forEach(key => {
+                    if (key.includes('Disiplin')) {
+                      console.log(`    - "${key}" (uzunluk: ${key.length})`)
+                      console.log(`    - Tam eşleşme: ${key.trim() === criterion.name.trim()}`)
+                      console.log(`    - Kısmi eşleşme: ${key.toLowerCase().includes(criterion.name.toLowerCase())}`)
+                    }
+                  })
+                }
               }
             }
 
