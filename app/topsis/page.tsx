@@ -156,6 +156,7 @@ export default function TOPSISPage() {
         // İlk sürücü için tüm sütun isimlerini logla
         if (driverIndex === 0) {
           console.log("🔍 Excel sütun isimleri:", Object.keys(driver))
+          console.log("🔍 Beklenen kriter sayısı:", leafCriteria.filter(c => averageWeights[c.id]).length)
         }
 
         // Çalışılan Saat verisini bul - önce tam eşleşme ara
@@ -209,17 +210,42 @@ export default function TOPSISPage() {
             // Excel sütun başlığını kriter ismiyle eşleştirmeye çalış
             const excelKeys = Object.keys(driver)
             let value = 0
+            let matchingKey = null
 
-            // Tam eşleşme ara
-            let matchingKey = excelKeys.find((key) => key.trim() === criterion.name.trim())
+            // 1. Önce tam eşleşme ara (kriter ismi ile)
+            matchingKey = excelKeys.find((key) => key.trim() === criterion.name.trim())
 
-            // Kısmi eşleşme ara
+            // 2. Excel aliases ile eşleşme ara
+            if (!matchingKey && criterion.excelAliases) {
+              for (const alias of criterion.excelAliases) {
+                matchingKey = excelKeys.find((key) => key.trim() === alias.trim())
+                if (matchingKey) break
+              }
+            }
+
+            // 3. Kısmi eşleşme ara (kriter ismi ile)
             if (!matchingKey) {
               matchingKey = excelKeys.find((key) => key.toLowerCase().includes(criterion.name.toLowerCase()))
             }
 
+            // 4. Excel aliases ile kısmi eşleşme ara
+            if (!matchingKey && criterion.excelAliases) {
+              for (const alias of criterion.excelAliases) {
+                matchingKey = excelKeys.find((key) => key.toLowerCase().includes(alias.toLowerCase()))
+                if (matchingKey) break
+              }
+            }
+
             if (matchingKey) {
               value = Number(driver[matchingKey]) || 0
+              if (driverIndex === 0) {
+                console.log(`✅ ${criterion.name} -> ${matchingKey} = ${value}`)
+              }
+            } else {
+              if (driverIndex === 0) {
+                console.log(`❌ ${criterion.name} için sütun bulunamadı!`)
+                console.log(`🔍 Aranan aliases:`, criterion.excelAliases || [])
+              }
             }
 
             row.push(value)
@@ -228,6 +254,11 @@ export default function TOPSISPage() {
 
         matrix.push(row)
       })
+
+      // Debug: Matrix boyutlarını kontrol et
+      console.log("🔍 Matrix boyutları:", matrix.length, "x", matrix[0]?.length)
+      console.log("🔍 İlk satır örneği:", matrix[0])
+      console.log("🔍 Kriter isimleri:", criteriaNames)
 
              // TOPSIS analizi çalıştır (detaylı)
        const topsisDetailed = calculateTOPSISDetailed({
