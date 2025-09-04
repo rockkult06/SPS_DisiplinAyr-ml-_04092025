@@ -225,7 +225,7 @@ export default function AboutPage() {
 
                     <div>
                       <h4 className="font-medium text-sm">Kaza Durumu</h4>
-                      <p className="text-xs text-gray-500">Yapılan km'ye göre kaza sayısı (Maliyet)</p>
+                      <p className="text-xs text-gray-500">Çalışılan saate göre kaza sayısı (Maliyet)</p>
                       <ul className="text-xs text-gray-400 ml-4 mt-1">
                         <li>• Ölümle Sonuçlanan Kaza</li>
                         <li>• Yaralanmalı Kaza</li>
@@ -235,13 +235,27 @@ export default function AboutPage() {
 
                     <div>
                       <h4 className="font-medium text-sm">Disiplin Durumu</h4>
-                      <p className="text-xs text-gray-500">Yapılan km'ye göre disiplin cezası (Maliyet)</p>
-                      <ul className="text-xs text-gray-400 ml-4 mt-1">
-                        <li>• 1. Derece Disiplin İhlali</li>
-                        <li>• 2. Derece Disiplin İhlali</li>
-                        <li>• 3. Derece Disiplin İhlali</li>
-                        <li>• 4. Derece Disiplin İhlali</li>
-                      </ul>
+                      <p className="text-xs text-gray-500">Çalışılan saate göre disiplin durumu (Maliyet)</p>
+                      <div className="ml-4 mt-1 space-y-2">
+                        <div>
+                          <p className="text-xs font-medium text-gray-500">Disiplin Cezası Sayısı:</p>
+                          <ul className="text-xs text-gray-400 ml-2">
+                            <li>• 1. Derece Disiplin İhlali Cezası</li>
+                            <li>• 2. Derece Disiplin İhlali Cezası</li>
+                            <li>• 3. Derece Disiplin İhlali Cezası</li>
+                            <li>• 4. Derece Disiplin İhlali Cezası</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-500">Disipline Sevk Sayısı (Ceza Yok):</p>
+                          <ul className="text-xs text-gray-400 ml-2">
+                            <li>• 1. Derece Disiplin İhlali Sevk</li>
+                            <li>• 2. Derece Disiplin İhlali Sevk</li>
+                            <li>• 3. Derece Disiplin İhlali Sevk</li>
+                            <li>• 4. Derece Disiplin İhlali Sevk</li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
