@@ -66,6 +66,7 @@ export function calculateTOPSIS(input: TOPSISInput): TOPSISResult[] {
       idealSolution[j] = Math.max(...column)
       negativeIdealSolution[j] = Math.min(...column)
     } else {
+      // Maliyet kriterleri için: düşük değerler daha iyi
       idealSolution[j] = Math.min(...column)
       negativeIdealSolution[j] = Math.max(...column)
     }
@@ -153,6 +154,7 @@ export function calculateTOPSISDetailed(input: TOPSISInput): TOPSISDetailedResul
       idealSolution[j] = Math.max(...column)
       negativeIdealSolution[j] = Math.min(...column)
     } else {
+      // Maliyet kriterleri için: düşük değerler daha iyi
       idealSolution[j] = Math.min(...column)
       negativeIdealSolution[j] = Math.max(...column)
     }

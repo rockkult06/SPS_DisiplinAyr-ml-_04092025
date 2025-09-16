@@ -362,12 +362,13 @@ export function calculateTOPSIS(
 
   criteriaIds.forEach((criteriaId, j) => {
     const column = weightedMatrix.map((row) => row[j])
-    const criteriaType = criteriaTypes[criteriaId] || "benefit"
+    const criteriaType = criteriaTypes[criteriaId] || "cost"
 
     if (criteriaType === "benefit") {
       idealSolution[j] = Math.max(...column)
       negativeIdealSolution[j] = Math.min(...column)
     } else {
+      // Maliyet kriterleri için: düşük değerler daha iyi
       idealSolution[j] = Math.min(...column)
       negativeIdealSolution[j] = Math.max(...column)
     }

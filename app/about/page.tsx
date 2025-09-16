@@ -269,23 +269,33 @@ export default function AboutPage() {
 
                   <div className="space-y-3">
                     <div>
-                      <h4 className="font-medium text-sm">Hatalı Hızlanma Sayısı</h4>
-                      <p className="text-xs text-gray-500">Ani ve gereksiz hızlanma sayısı (Maliyet)</p>
+                      <h4 className="font-medium text-sm">Sert Kalkış</h4>
+                      <p className="text-xs text-gray-500">Otobüs kalkışı sırasında tam gaza basılması durumunun tespitidir. (İhlal Şartları; İlk Hız: 0 km/h, Kontak Açık, Hız Değişimi (saniyede): 5,4 km/h) (Maliyet)</p>
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-sm">Hız İhlal Sayısı</h4>
-                      <p className="text-xs text-gray-500">Belirlenen hız limitlerinin aşılma sayısı (Maliyet)</p>
+                      <h4 className="font-medium text-sm">Hatalı Hızlanma</h4>
+                      <p className="text-xs text-gray-500">120 sn içerisinde sürekli hız artışı gerçekleşen aracın ani fren yapıp 0-5 km/s aralığına düşmesidir. (Maliyet)</p>
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-sm">Motor Uyarısı</h4>
-                      <p className="text-xs text-gray-500">Motor arızası veya kritik uyarı sayısı (Maliyet)</p>
+                      <h4 className="font-medium text-sm">Hız İhlali</h4>
+                      <p className="text-xs text-gray-500">Konum ve rota önemli olmaksızın, aracın, "60 sn den fazla süre" ve 80 km/s den büyük bir hızda kullanılmasını ifade etmektedir. (Maliyet)</p>
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-sm">Rölanti İhlal Sayısı</h4>
-                      <p className="text-xs text-gray-500">Gereksiz rölanti çalışma süresi (Maliyet)</p>
+                      <h4 className="font-medium text-sm">Motor Arıza Lambası</h4>
+                      <p className="text-xs text-gray-500">Motor Arıza (Kırmızı) Lambası ciddi motor arızasının göstergesidir. (İhlal Şartları; 120 sn boyunca Lamba aktif olacak + en az 250 metre yolculuk yapılmış olacaktır.) (Maliyet)</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-medium text-sm">Rölanti İhlali</h4>
+                      <p className="text-xs text-gray-500">600 sn (10 dk) üstünde rölanti yapan araçlar tespit edilmektedir. (İhlal Şartları; Kontak AÇIK, Motor Devri 400-3000 d/d aralığında, Araç Hızı 0-3 km/s) (Maliyet)</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-medium text-sm">Tehlikeli Viraj</h4>
+                      <p className="text-xs text-gray-500">Aracın savrulma ve yön değişimi sürecinin tehlikeli şekilde gerçekleştirilmesini ifade etmektedir. (Senaryo Şartları; Araç Hızı > 70 km/s, Yön Değişimi > 45 derece, İşlem Süreci =5 sn, gForce> 1,5 g yatay ivme) (Maliyet)</p>
                     </div>
                   </div>
                 </div>
