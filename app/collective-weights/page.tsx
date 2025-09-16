@@ -410,11 +410,6 @@ export default function CollectiveWeightsPage() {
                   Debug: {debugMode ? "ON" : "OFF"}
                 </Button>
               )}
-              {!dbConnected && (
-                <Badge variant="destructive" className="mr-2">
-                  Veritabanı Bağlantısı Yok!
-                </Badge>
-              )}
               <Button onClick={refreshEvaluations} disabled={isRefreshing} variant="outline" size="sm">
                 <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
                 Yenile

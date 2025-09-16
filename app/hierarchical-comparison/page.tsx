@@ -30,9 +30,7 @@ export default function HierarchicalComparisonPage() {
     { id: "admin", name: "İdari Alt Kriterler", description: "İdari değerlendirme alt kriterlerinin karşılaştırması" },
     { id: "overtime", name: "Fazla Mesai Kriterleri", description: "Fazla mesai türlerinin karşılaştırması" },
     { id: "accident", name: "Kaza Kriterleri", description: "Kaza türlerinin karşılaştırması" },
-    { id: "discipline", name: "Disiplin Kriterleri", description: "Disiplin cezası ve sevk kriterlerinin karşılaştırması" },
-    { id: "discipline_penalty", name: "Disiplin Cezası Kriterleri", description: "Disiplin cezası derecelerinin karşılaştırması" },
-    { id: "discipline_referral", name: "Disipline Sevk Kriterleri", description: "Disipline sevk derecelerinin karşılaştırması" },
+    { id: "discipline_penalty", name: "Disiplin Ceza Kriterleri", description: "Disiplin ceza derecelerinin karşılaştırması" },
     {
       id: "technical",
       name: "Teknik Alt Kriterler",
