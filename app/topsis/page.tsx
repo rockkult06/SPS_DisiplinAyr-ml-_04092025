@@ -94,7 +94,13 @@ export default function TOPSISPage() {
             headers.forEach((header, index) => {
               const value = row[index]
               if (value !== null && value !== undefined) {
-                obj[header] = typeof value === "string" ? value : Number(value) || 0
+                // Virgülle ayrılmış ondalık sayıları noktaya çevir
+                if (typeof value === "string" && value.includes(",")) {
+                  const normalizedValue = value.replace(",", ".")
+                  obj[header] = Number(normalizedValue) || 0
+                } else {
+                  obj[header] = typeof value === "string" ? value : Number(value) || 0
+                }
               }
             })
             return obj
