@@ -188,11 +188,10 @@ export default function TOPSISPage() {
               console.log("✅ Kısmi eşleşme bulundu:", partialKeys[0], "=", distanceTraveled)
             }
           } else {
-            // Fallback: saat içeren sütunları ara
+            // Fallback: saat içeren sütunları ara (km içerenleri de dahil et)
             const fallbackKeys = Object.keys(driver).filter(
               (key) => (key.toLowerCase().includes("saat") || key.toLowerCase().includes("st")) &&
-                       !key.toLowerCase().includes("oran") && !key.toLowerCase().includes("ratio") &&
-                       !key.toLowerCase().includes("km")
+                       !key.toLowerCase().includes("oran") && !key.toLowerCase().includes("ratio")
             )
             
             if (fallbackKeys.length > 0) {
@@ -337,7 +336,7 @@ export default function TOPSISPage() {
 
       // 1. Ana sonuçlar sayfası
       const wsData = [
-        ["Sıra", "Sürücü", "TOPSIS Puanı", "Çalışılan Saat"],
+        ["Sıra", "Sürücü", "TOPSIS Puanı", "Çalışılan Saat/km"],
         ...results.map((result) => [
           result.rank,
           result.alternative,
@@ -566,7 +565,7 @@ export default function TOPSISPage() {
                         <TableHead className="w-16">Sıra</TableHead>
                         <TableHead>Sürücü</TableHead>
                         <TableHead>TOPSIS Puanı</TableHead>
-                                                  <TableHead>Çalışılan Saat</TableHead>
+                        <TableHead>Çalışılan Saat/km</TableHead>
                         <TableHead>Performans</TableHead>
                       </TableRow>
                     </TableHeader>
