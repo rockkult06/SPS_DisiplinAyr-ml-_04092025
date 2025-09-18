@@ -236,14 +236,14 @@ export const criteriaHierarchy: Record<string, Criterion> = {
   },
   engine_fault_light: {
     id: "engine_fault_light",
-    name: "Motor Arıza Lambası",
+    name: "Kırmızı Lamba Uyarısı",
     level: 2,
     parentId: "technical",
     children: [],
     isLeaf: true,
     type: "cost",
     description: "Motor Arıza (Kırmızı) Lambası ciddi motor arızasının göstergesidir. Kılavuzlarda \"bu lamba yandığında trafik kontrol edilerek aracın sağ tarafa parkı gerçekleştirilmeli ve servise haber verilmelidir\" deniliyor. (İhlal Şartları; 120 sn boyunca Lamba aktif olacak + en az 250 metre yolculuk yapılmış olacaktır.)",
-    excelAliases: ["Motor Arıza Lambası", "MotorArızaLambası", "Motor (Kırmızı Lamba) Uyarısı"],
+    excelAliases: ["Kırmızı Lamba Uyarısı", "KırmızıLambaUyarısı", "Motor Arıza Lambası", "MotorArızaLambası", "Motor (Kırmızı Lamba) Uyarısı"],
   },
   idle_violation: {
     id: "idle_violation",

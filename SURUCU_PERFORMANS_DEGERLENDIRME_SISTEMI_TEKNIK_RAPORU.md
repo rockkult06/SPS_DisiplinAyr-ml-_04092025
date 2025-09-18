@@ -124,7 +124,7 @@ Seviye 1: Ana Kriterler
 
 Seviye 2: Alt Kriterler
 ├── İdari: Sağlık Devamsızlığı, Fazla Mesai, Kaza, Disiplin
-└── Teknik: Hızlanma, Hız İhlali, Motor Uyarısı, Rölanti
+└── Teknik: Hızlanma, Hız İhlali, Kırmızı Lamba Uyarısı, Rölanti
 
 Seviye 3: Detay Kriterler
 ├── Fazla Mesai: Normal, Hafta Sonu, Resmi Tatil

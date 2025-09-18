@@ -270,7 +270,7 @@ export default function AboutPage() {
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-sm">Motor Arıza Lambası</h4>
+                      <h4 className="font-medium text-sm">Kırmızı Lamba Uyarısı</h4>
                       <p className="text-xs text-gray-500">Motor Arıza (Kırmızı) Lambası ciddi motor arızasının göstergesidir. (İhlal Şartları; 120 sn boyunca Lamba aktif olacak + en az 250 metre yolculuk yapılmış olacaktır.) (Maliyet)</p>
                     </div>
 
