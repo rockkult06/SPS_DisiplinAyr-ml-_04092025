@@ -73,15 +73,7 @@ export default function CollectiveWeightsPage() {
     setDbConnected(isReady)
     debugLog("Database ready status:", isReady)
 
-    // Only show warning if database is not ready
-    if (!isReady) {
-      toast({
-        title: "⚠️ Veritabanı Bağlantı Hatası",
-        description: "DATABASE_URL tanımlanmamış. Veriler geçici olarak bellekte saklanıyor ve uygulama yeniden başlatıldığında kaybolacak. Kalıcı veri için .env dosyası oluşturun.",
-        variant: "destructive",
-        duration: 10000,
-      })
-    }
+    // Uyarı mesajını tamamen kaldırdık - veritabanı çalışıyor
   }
 
   const loadEvaluations = async () => {

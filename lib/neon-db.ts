@@ -24,12 +24,6 @@ function validateDatabaseUrl(url: string): boolean {
 }
 
 try {
-  // Debug: Log all environment variables that start with DATABASE
-  console.log("🔍 Environment variables check:")
-  console.log("NODE_ENV:", process.env.NODE_ENV)
-  console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL)
-  console.log("DATABASE_URL value:", process.env.DATABASE_URL ? "***HIDDEN***" : "undefined")
-  
   if (process.env.DATABASE_URL) {
     console.log("DATABASE_URL found, validating...")
 
@@ -42,14 +36,11 @@ try {
     neonReady = true
     console.log("Neon connection created successfully")
   } else {
-    console.warn("⚠️  DATABASE_URL environment variable not found!")
-    console.warn("⚠️  Using in-memory storage - data will be lost on restart")
-    console.warn("⚠️  To persist data, create a .env file with DATABASE_URL")
+    console.log("DATABASE_URL not found, using in-memory storage")
     connectionError = "DATABASE_URL environment variable not found"
   }
 } catch (e) {
-  console.error("❌ Neon connection initialization error:", e)
-  console.warn("⚠️  Falling back to in-memory storage - data will be lost on restart")
+  console.error("Neon connection initialization error:", e)
   connectionError = e instanceof Error ? e.message : "Unknown connection error"
   neonReady = false
 }
