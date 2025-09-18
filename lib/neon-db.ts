@@ -24,6 +24,12 @@ function validateDatabaseUrl(url: string): boolean {
 }
 
 try {
+  // Debug: Log all environment variables that start with DATABASE
+  console.log("🔍 Environment variables check:")
+  console.log("NODE_ENV:", process.env.NODE_ENV)
+  console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL)
+  console.log("DATABASE_URL value:", process.env.DATABASE_URL ? "***HIDDEN***" : "undefined")
+  
   if (process.env.DATABASE_URL) {
     console.log("DATABASE_URL found, validating...")
 
