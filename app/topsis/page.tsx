@@ -165,9 +165,9 @@ export default function TOPSISPage() {
           console.log("🔍 Beklenen kriter sayısı:", leafCriteria.filter(c => averageWeights[c.id]).length)
         }
 
-        // Çalışılan Saat verisini bul - önce tam eşleşme ara
+        // Çalışılan Saat/km verisini bul - önce tam eşleşme ara
         const exactKeys = Object.keys(driver).filter(
-          (key) => key.trim().toLowerCase() === "çalışılan saat" || key.trim().toLowerCase() === "çalışılan st"
+          (key) => key.trim().toLowerCase() === "çalışılan saat/km" || key.trim().toLowerCase() === "çalışılan st/km"
         )
         
         if (exactKeys.length > 0) {
@@ -178,7 +178,8 @@ export default function TOPSISPage() {
         } else {
           // Kısmi eşleşme ara
           const partialKeys = Object.keys(driver).filter(
-            (key) => key.toLowerCase().includes("çalışılan saat") || key.toLowerCase().includes("çalışılan st")
+            (key) => key.toLowerCase().includes("çalışılan saat/km") || key.toLowerCase().includes("çalışılan st/km") || 
+                     key.toLowerCase().includes("çalışılan saat") || key.toLowerCase().includes("çalışılan st")
           )
           
           if (partialKeys.length > 0) {
@@ -190,7 +191,8 @@ export default function TOPSISPage() {
             // Fallback: saat içeren sütunları ara
             const fallbackKeys = Object.keys(driver).filter(
               (key) => (key.toLowerCase().includes("saat") || key.toLowerCase().includes("st")) &&
-                       !key.toLowerCase().includes("oran") && !key.toLowerCase().includes("ratio")
+                       !key.toLowerCase().includes("oran") && !key.toLowerCase().includes("ratio") &&
+                       !key.toLowerCase().includes("km")
             )
             
             if (fallbackKeys.length > 0) {
@@ -200,7 +202,7 @@ export default function TOPSISPage() {
               }
             } else {
               if (driverIndex === 0) {
-                console.log("❌ Çalışılan saat sütunu bulunamadı!")
+                console.log("❌ Çalışılan saat/km sütunu bulunamadı!")
                 console.log("🔍 Mevcut sütunlar:", Object.keys(driver))
               }
             }
