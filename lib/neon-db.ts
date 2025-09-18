@@ -48,8 +48,8 @@ try {
   neonReady = false
 }
 
-// TEST MODE: Simulate database connection for testing
-if (!neonReady && process.env.NODE_ENV === 'development') {
+// TEST MODE: Simulate database connection for testing (only if no DATABASE_URL)
+if (!neonReady && process.env.NODE_ENV === 'development' && !process.env.DATABASE_URL) {
   console.log("🧪 TEST MODE: Simulating database connection...")
   neonReady = true
   connectionError = null
@@ -445,6 +445,11 @@ export async function checkDatabaseConnection(): Promise<boolean> {
     console.error("Database connection test failed:", error)
     return false
   }
+}
+
+/* Simple connection status check (without actual query) */
+export function isDatabaseReady(): boolean {
+  return neonReady && sql !== null
 }
 
 /* ------------------------------------------------------------------ */

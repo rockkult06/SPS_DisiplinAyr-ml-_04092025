@@ -32,7 +32,7 @@ import {
 } from "@/lib/api-client"
 import { getLeafCriteria } from "@/lib/criteria-hierarchy"
 import { useToast } from "@/hooks/use-toast"
-import { checkDatabaseConnection } from "@/lib/neon-db"
+import { checkDatabaseConnection, isDatabaseReady } from "@/lib/neon-db"
 
 export default function CollectiveWeightsPage() {
   const [evaluations, setEvaluations] = useState<AHPEvaluation[]>([])
@@ -67,11 +67,14 @@ export default function CollectiveWeightsPage() {
 
   const checkDbStatus = async () => {
     debugLog("Checking database connection...")
-    const connected = await checkDatabaseConnection()
-    setDbConnected(connected)
-    debugLog("Database connection status:", connected)
+    
+    // First check if database is ready (without actual query)
+    const isReady = isDatabaseReady()
+    setDbConnected(isReady)
+    debugLog("Database ready status:", isReady)
 
-    if (!connected) {
+    // Only show warning if database is not ready
+    if (!isReady) {
       toast({
         title: "⚠️ Veritabanı Bağlantı Hatası",
         description: "DATABASE_URL tanımlanmamış. Veriler geçici olarak bellekte saklanıyor ve uygulama yeniden başlatıldığında kaybolacak. Kalıcı veri için .env dosyası oluşturun.",

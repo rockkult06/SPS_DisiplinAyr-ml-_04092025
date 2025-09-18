@@ -1,5 +1,4 @@
 {
-  "/api/ahp/route": "app/api/ahp/route.js",
   "/page": "app/page.js",
   "/collective-weights/page": "app/collective-weights/page.js"
 }
