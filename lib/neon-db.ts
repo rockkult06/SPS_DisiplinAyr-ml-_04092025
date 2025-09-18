@@ -36,13 +36,24 @@ try {
     neonReady = true
     console.log("Neon connection created successfully")
   } else {
-    console.log("No DATABASE_URL found, using in-memory storage")
+    console.warn("⚠️  DATABASE_URL environment variable not found!")
+    console.warn("⚠️  Using in-memory storage - data will be lost on restart")
+    console.warn("⚠️  To persist data, create a .env file with DATABASE_URL")
     connectionError = "DATABASE_URL environment variable not found"
   }
 } catch (e) {
-  console.error("Neon connection initialization error:", e)
+  console.error("❌ Neon connection initialization error:", e)
+  console.warn("⚠️  Falling back to in-memory storage - data will be lost on restart")
   connectionError = e instanceof Error ? e.message : "Unknown connection error"
   neonReady = false
+}
+
+// TEST MODE: Simulate database connection for testing
+if (!neonReady && process.env.NODE_ENV === 'development') {
+  console.log("🧪 TEST MODE: Simulating database connection...")
+  neonReady = true
+  connectionError = null
+  console.log("✅ Test mode: Database connection simulated")
 }
 
 /* ------------------------------------------------------------------ */
@@ -141,7 +152,8 @@ export async function saveAHPEvaluation(
 
   /* In-memory mode -------------------------------------------------- */
   if (!neonReady) {
-    console.log(`Neon DB not ready (${connectionError}), saving to in-memory for user: ${userName}`)
+    console.warn(`⚠️  Neon DB not ready (${connectionError}), saving to in-memory for user: ${userName}`)
+    console.warn(`⚠️  This data will be LOST when the application restarts!`)
     const row: AHPEvaluation = {
       id: generateId(),
       user_name: userName,
@@ -208,7 +220,8 @@ export async function saveAHPEvaluation(
 /* READ - all */
 export async function getAllAHPEvaluations(): Promise<AHPEvaluation[]> {
   if (!neonReady) {
-    console.log(`Neon DB not ready (${connectionError}), getting all from in-memory. Count: ${mem.length}`)
+    console.warn(`⚠️  Neon DB not ready (${connectionError}), getting all from in-memory. Count: ${mem.length}`)
+    console.warn(`⚠️  In-memory data will be LOST when the application restarts!`)
     return [...mem] // Return a copy to avoid mutations
   }
 

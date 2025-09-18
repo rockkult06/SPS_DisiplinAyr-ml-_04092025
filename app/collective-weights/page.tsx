@@ -73,10 +73,10 @@ export default function CollectiveWeightsPage() {
 
     if (!connected) {
       toast({
-        title: "Veritabanı Bağlantı Hatası",
-        description: "Veritabanı bağlantısı kurulamadı. Veriler geçici olarak bellekte saklanacaktır.",
+        title: "⚠️ Veritabanı Bağlantı Hatası",
+        description: "DATABASE_URL tanımlanmamış. Veriler geçici olarak bellekte saklanıyor ve uygulama yeniden başlatıldığında kaybolacak. Kalıcı veri için .env dosyası oluşturun.",
         variant: "destructive",
-        duration: 8000,
+        duration: 10000,
       })
     }
   }
@@ -460,6 +460,11 @@ export default function CollectiveWeightsPage() {
                   <div className="col-span-2">
                     <strong>Seçili ID'ler (Silme):</strong> {selectedForDelete.join(", ") || "Yok"}
                   </div>
+                  {!dbConnected && (
+                    <div className="col-span-2 p-2 bg-red-100 border border-red-300 rounded text-red-800">
+                      <strong>⚠️ Uyarı:</strong> Veritabanı bağlantısı yok. Veriler geçici olarak bellekte saklanıyor ve uygulama yeniden başlatıldığında kaybolacak. Kalıcı veri için .env dosyası oluşturun.
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
