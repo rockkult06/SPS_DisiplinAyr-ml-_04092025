@@ -142,7 +142,7 @@ Seviye 4: Leaf Kriterler
 
 | **Kriter** | **Tip** | **Açıklama** | **Veri Kaynağı** |
 |------------|---------|--------------|------------------|
-| **Sağlık Sebebiyle Devamsızlık** | Maliyet | Sağlık raporu nedeniyle işe gelmeme gün sayısı | İK Sistemi |
+| **İşe Devam Durumu** | Maliyet | Yasal izin hariç devamsız gün sayısı | İK Sistemi |
 | **Normal Fazla Mesai** | Fayda | Hafta içi fazla mesai saatleri | Bordro Sistemi |
 | **Hafta Tatili Mesaisi** | Fayda | Hafta sonu mesai saatleri | Bordro Sistemi |
 | **Resmi Tatil Mesaisi** | Fayda | Resmi tatil mesai saatleri | Bordro Sistemi |

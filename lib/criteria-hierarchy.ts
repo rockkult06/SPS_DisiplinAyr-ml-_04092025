@@ -36,14 +36,14 @@ export const criteriaHierarchy: Record<string, Criterion> = {
   // İdari Değerlendirme Alt Kriterleri (Seviye 2)
   attendance: {
     id: "attendance",
-    name: "Sağlık Sebebiyle Devamsızlık",
+    name: "İşe Devam Durumu",
     level: 2,
     parentId: "admin",
     children: [],
     isLeaf: true,
     type: "cost",
-    description: "Sağlık raporu nedeniyle işe gelmediği gün sayısı",
-    excelAliases: ["Sağlık Sebebiyle Devamsızlık", "Sağlık Sebebiyle Devamsızlık Durumu"],
+    description: "Yasal izin hariç devamsız gün sayısı",
+    excelAliases: ["İşe Devam Durumu", "Sağlık Sebebiyle Devamsızlık", "Sağlık Sebebiyle Devamsızlık Durumu"],
   },
   overtime: {
     id: "overtime",

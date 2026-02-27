@@ -207,9 +207,9 @@ export default function AboutPage() {
 
                   <div className="space-y-3">
                     <div>
-                      <h4 className="font-medium text-sm">Sağlık Sebebiyle Devamsızlık</h4>
+                      <h4 className="font-medium text-sm">İşe Devam Durumu</h4>
                       <p className="text-xs text-gray-500">
-                        Sağlık raporu nedeniyle işe gelmediği gün sayısı (Maliyet)
+                        Yasal izin hariç devamsız gün sayısı (Maliyet)
                       </p>
                     </div>
 
