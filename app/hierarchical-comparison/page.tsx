@@ -13,6 +13,11 @@ import { criteriaHierarchy, getMainCriteria, getCriteriaById, initializeHierarch
 import { calculateHierarchicalAHP, sliderToAHPValue, ahpValueToSlider, type HierarchicalAHPResult } from "@/lib/ahp"
 import { saveAHPEvaluation, getAHPEvaluationByUser } from "@/lib/api-client"
 import { UserLoginDialog } from "@/components/user-login-dialog"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function HierarchicalComparisonPage() {
   const [hierarchyData, setHierarchyData] = useState<Record<string, number[][]>>({})
@@ -181,8 +186,28 @@ export default function HierarchicalComparisonPage() {
                 return (
                   <div key={`${i}-${actualJ}`} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-600">{criterion1.name}</span>
-                      <span className="text-sm font-medium text-green-600">{criterion2.name}</span>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-sm font-medium text-blue-600 cursor-help underline decoration-dotted decoration-blue-400 underline-offset-2">{criterion1.name}</span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="max-w-sm">
+                          <p>{criterion1.description}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            ({criterion1.type === "benefit" ? "Fayda" : "Maliyet"})
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-sm font-medium text-green-600 cursor-help underline decoration-dotted decoration-green-400 underline-offset-2">{criterion2.name}</span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="max-w-sm">
+                          <p>{criterion2.description}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            ({criterion2.type === "benefit" ? "Fayda" : "Maliyet"})
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                     <div className="px-4">
                       <Slider

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { SiteHeader } from "@/components/site-header"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -22,12 +23,14 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <div className="relative min-h-screen flex flex-col">
+<ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+            <TooltipProvider delayDuration={300}>
+            <div className="relative min-h-screen flex flex-col">
             <SiteHeader />
             <main className="flex-1">{children}</main>
           </div>
           <Toaster />
+            </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
