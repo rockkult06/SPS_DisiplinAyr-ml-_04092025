@@ -18,7 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { ArrowLeft, Users, Calculator, TrendingUp, RefreshCw, Trash2, TrashIcon, Download } from "lucide-react"
+import { ArrowLeft, Users, Calculator, TrendingUp, RefreshCw, Trash2, TrashIcon, Download, ChevronRight, FolderOpen } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import * as XLSX from "xlsx"
@@ -30,7 +30,7 @@ import {
   deleteAllAHPEvaluations,
   type AHPEvaluation,
 } from "@/lib/api-client"
-import { getLeafCriteria } from "@/lib/criteria-hierarchy"
+import { getLeafCriteria, getMainCriteria, getCriteriaById } from "@/lib/criteria-hierarchy"
 import { useToast } from "@/hooks/use-toast"
 import { checkDatabaseConnection, isDatabaseReady } from "@/lib/neon-db"
 
@@ -364,6 +364,59 @@ export default function CollectiveWeightsPage() {
   }
 
   const leafCriteria = getLeafCriteria()
+  const mainCriteria = getMainCriteria()
+
+  // Bir kriterin (ve altındaki yaprak kriterlerin) toplam ağırlığını hesapla
+  const getSubtreeWeight = (criterionId: string, weights: Record<string, number>): number => {
+    const c = getCriteriaById(criterionId)
+    if (!c) return 0
+    if (c.isLeaf) return weights[criterionId] ?? 0
+    return c.children.reduce((sum, childId) => sum + getSubtreeWeight(childId, weights), 0)
+  }
+
+  // Hiyerarşi ağacı düğümü (recursive)
+  const renderCriterionNode = (criterionId: string, depth: number) => {
+    const c = getCriteriaById(criterionId)
+    if (!c) return null
+    const weight = c.isLeaf ? (averageWeights[criterionId] ?? 0) : getSubtreeWeight(criterionId, averageWeights)
+    const weightPct = (weight * 100).toFixed(1)
+    const hasChildren = c.children.length > 0
+    const paddingLeft = depth * 20
+
+    return (
+      <div key={criterionId} className="select-none">
+        <div
+          className="flex items-center justify-between py-1.5 px-2 rounded-md hover:bg-muted/60 transition-colors border-l-2 border-transparent hover:border-primary/30"
+          style={{ paddingLeft: `${paddingLeft + 8}px` }}
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            {hasChildren ? (
+              <FolderOpen className="h-4 w-4 text-muted-foreground shrink-0" />
+            ) : (
+              <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 opacity-50" />
+            )}
+            <span className={`text-sm truncate ${hasChildren ? "font-semibold" : "font-normal"}`}>
+              {c.name}
+            </span>
+            {!c.isLeaf && (
+              <span className="text-xs text-muted-foreground shrink-0">
+                ({c.children.length} alt kriter)
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 shrink-0 ml-2">
+            <Progress value={weight * 100} className="w-16 h-1.5" />
+            <span className="text-sm font-medium tabular-nums w-10 text-right">{weightPct}%</span>
+          </div>
+        </div>
+        {hasChildren && (
+          <div className="border-l border-muted ml-2">
+            {c.children.map((childId) => renderCriterionNode(childId, depth + 1))}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -720,6 +773,20 @@ export default function CollectiveWeightsPage() {
                       </div>
                     )
                   })}
+                </div>
+
+                {/* Kriter Hiyerarşisi Ağacı */}
+                <div className="mt-8 pt-6 border-t">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                    <FolderOpen className="h-4 w-4" />
+                    Kriter Hiyerarşisi Ağacı
+                  </h4>
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Seçilen değerlendirmelerin ortalama ağırlıkları hiyerarşik yapıda gösterilmektedir.
+                  </p>
+                  <div className="rounded-lg border bg-muted/30 p-3 space-y-0.5">
+                    {mainCriteria.map((criterion) => renderCriterionNode(criterion.id, 0))}
+                  </div>
                 </div>
               </CardContent>
             </Card>

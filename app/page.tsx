@@ -23,7 +23,7 @@ export default function HomePage() {
               Sistemi
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Toplu taşıma şirketlerinde çalışan sürücülerin performansını objektif ve bilimsel yöntemlerle
+              Toplu taşıma kuruluşlarında çalışan sürücülerin performansını objektif ve bilimsel yöntemlerle
               değerlendiren kapsamlı analiz platformu
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
