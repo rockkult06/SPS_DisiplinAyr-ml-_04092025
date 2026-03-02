@@ -123,7 +123,7 @@ Seviye 1: Ana Kriterler
 └── Teknik Değerlendirme (Telemetri)
 
 Seviye 2: Alt Kriterler
-├── İdari: Sağlık Devamsızlığı, Fazla Mesai, Kaza, Disiplin
+├── İdari: İşe Devam Durumu, Fazla Mesai, Kaza, Disiplin
 └── Teknik: Hızlanma, Hız İhlali, Kırmızı Lamba Uyarısı, Rölanti
 
 Seviye 3: Detay Kriterler
