@@ -124,7 +124,7 @@ Seviye 1: Ana Kriterler
 
 Seviye 2: Alt Kriterler
 ├── İdari: İşe Devam Durumu, Fazla Mesai, Kaza, Disiplin
-└── Teknik: Hızlanma, Hız İhlali, Kırmızı Lamba Uyarısı, Rölanti
+└── Teknik: Sert Kalkış, Gereksiz Hızlanma, Hız İhlali, Kırmızı Lamba Uyarısı, Rölanti, Tehlikeli Viraj
 
 Seviye 3: Detay Kriterler
 ├── Fazla Mesai: Normal, Hafta Sonu, Resmi Tatil
@@ -168,7 +168,7 @@ Seviye 4: Leaf Kriterler
 
 | **Kriter** | **Tip** | **Açıklama** | **Veri Kaynağı** |
 |------------|---------|--------------|------------------|
-| **Hatalı Hızlanma Sayısı** | Maliyet | Ani ve gereksiz hızlanma sayısı | Telemetri Sistemi |
+| **Gereksiz Hızlanma Sayısı** | Maliyet | Ani ve gereksiz hızlanma sayısı | Telemetri Sistemi |
 | **Hız İhlal Sayısı** | Maliyet | Hız limiti aşma sayısı | Telemetri Sistemi |
 | **Motor Uyarısı** | Maliyet | Motor arıza uyarı sayısı | Telemetri Sistemi |
 | **Rölanti İhlal Sayısı** | Maliyet | Gereksiz rölanti süresi | Telemetri Sistemi |

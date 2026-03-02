@@ -260,7 +260,7 @@ export default function AboutPage() {
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-sm">Hatalı Hızlanma</h4>
+                      <h4 className="font-medium text-sm">Gereksiz Hızlanma</h4>
                       <p className="text-xs text-gray-500">120 sn içerisinde sürekli hız artışı gerçekleşen aracın ani fren yapıp 0-5 km/s aralığına düşmesidir. (Maliyet)</p>
                     </div>
 

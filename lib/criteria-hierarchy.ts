@@ -214,14 +214,14 @@ export const criteriaHierarchy: Record<string, Criterion> = {
   },
   faulty_acceleration: {
     id: "faulty_acceleration",
-    name: "Hatalı Hızlanma",
+    name: "Gereksiz Hızlanma",
     level: 2,
     parentId: "technical",
     children: [],
     isLeaf: true,
     type: "cost",
     description: "120 sn içerisinde sürekli hız artışı gerçekleşen aracın ani fren yapıp 0-5 km/s aralığına düşmesidir. (Senaryo 120 sn de gerçekleşmelidir. Araç hızı >20km/h iken hızlanarak >50km/h üstüne yükselmelidir. Bu yükselik esnasında ani olarak <5 km/s değerine düşmeli, orada 10 sn kalmalı ve tekrar >20 km/s hız artışı yaşanmalıdır.)",
-    excelAliases: ["Hatalı Hızlanma", "HatalıHızlanma"],
+    excelAliases: ["Gereksiz Hızlanma", "GereksizHızlanma", "Hatalı Hızlanma", "HatalıHızlanma"],
   },
   speed_violation: {
     id: "speed_violation",
