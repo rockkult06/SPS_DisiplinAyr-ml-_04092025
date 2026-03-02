@@ -374,49 +374,102 @@ export default function CollectiveWeightsPage() {
     return c.children.reduce((sum, childId) => sum + getSubtreeWeight(childId, weights), 0)
   }
 
-  // Hiyerarşi ağacı düğümü (recursive)
-  const renderCriterionNode = (criterionId: string, depth: number) => {
+  // Kriter ağacı düğüm kutusu (isim + ağırlık)
+  const TreeNodeBox = ({
+    criterionId,
+    level,
+  }: {
+    criterionId: string
+    level: "goal" | "main" | "sub" | "leaf"
+  }) => {
     const c = getCriteriaById(criterionId)
     if (!c) return null
     const weight = c.isLeaf ? (averageWeights[criterionId] ?? 0) : getSubtreeWeight(criterionId, averageWeights)
     const weightPct = (weight * 100).toFixed(1)
-    const hasChildren = c.children.length > 0
-    const paddingLeft = depth * 20
-
+    const levelStyles = {
+      goal: "bg-slate-100 border-slate-300 text-slate-800 font-semibold text-base py-2 px-4",
+      main: "bg-blue-50/80 border-blue-200 text-blue-900 font-medium text-sm py-2 px-3",
+      sub: "bg-slate-50 border-slate-200 text-slate-700 text-sm py-1.5 px-2.5",
+      leaf: "bg-white border-slate-200 text-slate-600 text-xs py-1 px-2",
+    }
     return (
-      <div key={criterionId} className="select-none">
-        <div
-          className="flex items-center justify-between py-1.5 px-2 rounded-md hover:bg-muted/60 transition-colors border-l-2 border-transparent hover:border-primary/30"
-          style={{ paddingLeft: `${paddingLeft + 8}px` }}
-        >
-          <div className="flex items-center gap-2 min-w-0">
-            {hasChildren ? (
-              <FolderOpen className="h-4 w-4 text-muted-foreground shrink-0" />
-            ) : (
-              <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 opacity-50" />
-            )}
-            <span className={`text-sm truncate ${hasChildren ? "font-semibold" : "font-normal"}`}>
-              {c.name}
-            </span>
-            {!c.isLeaf && (
-              <span className="text-xs text-muted-foreground shrink-0">
-                ({c.children.length} alt kriter)
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-2 shrink-0 ml-2">
-            <Progress value={weight * 100} className="w-16 h-1.5" />
-            <span className="text-sm font-medium tabular-nums w-10 text-right">{weightPct}%</span>
-          </div>
-        </div>
-        {hasChildren && (
-          <div className="border-l border-muted ml-2">
-            {c.children.map((childId) => renderCriterionNode(childId, depth + 1))}
-          </div>
-        )}
+      <div
+        className={`rounded-md border shadow-sm shrink-0 ${levelStyles[level]}`}
+        title={c.description}
+      >
+        <span className="whitespace-nowrap">{c.name}</span>
+        <span className="text-slate-500 font-normal ml-1">(%{weightPct})</span>
       </div>
     )
   }
+
+  // Hiyerarşi ağacı şeması (Goal -> Ana Kriterler -> Alt Kriterler -> Kırılımlar)
+  const renderHierarchyTree = () => (
+    <div className="flex flex-col items-center py-4 w-full max-w-4xl mx-auto">
+      {/* Seviye 0: Goal (En Üst Katman) */}
+      <div className="flex flex-col items-center">
+        <div className="rounded-lg border-2 border-slate-400 bg-slate-100 px-6 py-3 shadow-sm">
+          <span className="font-semibold text-slate-800">Kriter Hiyerarşisi Ağacı</span>
+        </div>
+        <div className="w-0.5 h-6 bg-slate-300 shrink-0" />
+      </div>
+
+      {/* Bağlantı: dikey çizgi + yatay çizgi + iki dikey dal */}
+      <div className="flex flex-col items-center w-full">
+        <div className="w-0.5 h-3 bg-slate-300 shrink-0" />
+        <div className="flex w-full border-t border-slate-300 pt-0.5">
+          {mainCriteria.map((_, idx) => (
+            <div key={idx} className="flex-1 flex flex-col items-center min-w-0">
+              <div className="w-0.5 h-4 bg-slate-300 shrink-0" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Seviye 1: Ana Kriterler + Seviye 2/3 */}
+      <div className="flex w-full gap-4 mt-0.5">
+        {mainCriteria.map((criterion) => {
+          const w = getSubtreeWeight(criterion.id, averageWeights)
+          const pct = (w * 100).toFixed(1)
+          return (
+            <div key={criterion.id} className="flex-1 flex flex-col items-center min-w-0">
+              <div className="rounded-lg border-2 border-blue-200 bg-blue-50/90 px-3 py-2 shadow-sm text-center w-full max-w-[220px]">
+                <span className="font-medium text-blue-900 text-sm leading-tight">{criterion.name}</span>
+                <span className="text-blue-700 ml-1 text-sm">(%{pct})</span>
+              </div>
+              {criterion.children.length > 0 && (
+                <>
+                  <div className="w-0.5 h-4 bg-slate-300 shrink-0 mt-0.5" />
+                  <div className="flex gap-2 flex-wrap justify-center mt-0.5">
+                    {criterion.children.map((childId) => {
+                      const child = getCriteriaById(childId)
+                      if (!child) return null
+                      const hasChildren = child.children.length > 0
+                      return (
+                        <div key={childId} className="flex flex-col items-center">
+                          <TreeNodeBox criterionId={childId} level={hasChildren ? "sub" : "leaf"} />
+                          {hasChildren && (
+                            <>
+                              <div className="w-0.5 h-2 bg-slate-200 shrink-0 mt-0.5" />
+                              <div className="flex gap-1.5 flex-wrap justify-center mt-0.5">
+                                {child.children.map((leafId) => (
+                                  <TreeNodeBox key={leafId} criterionId={leafId} level="leaf" />
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 
   if (isLoading) {
     return (
@@ -775,17 +828,17 @@ export default function CollectiveWeightsPage() {
                   })}
                 </div>
 
-                {/* Kriter Hiyerarşisi Ağacı */}
+                {/* Kriter Ağacı (Hierarchy Tree) Şeması */}
                 <div className="mt-8 pt-6 border-t">
-                  <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-2 flex items-center gap-2">
                     <FolderOpen className="h-4 w-4" />
-                    Kriter Hiyerarşisi Ağacı
+                    Kriter Ağacı (Hiyerarşi Şeması)
                   </h4>
                   <p className="text-xs text-muted-foreground mb-4">
-                    Seçilen değerlendirmelerin ortalama ağırlıkları hiyerarşik yapıda gösterilmektedir.
+                    Seçilen değerlendirmelerin ortalama ağırlıkları, hedef → ana kriterler → alt kriterler → kırılımlar olarak gösterilmektedir.
                   </p>
-                  <div className="rounded-lg border bg-muted/30 p-3 space-y-0.5">
-                    {mainCriteria.map((criterion) => renderCriterionNode(criterion.id, 0))}
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 overflow-x-auto">
+                    {renderHierarchyTree()}
                   </div>
                 </div>
               </CardContent>
