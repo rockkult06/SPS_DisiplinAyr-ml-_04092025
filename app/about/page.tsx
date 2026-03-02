@@ -281,7 +281,7 @@ export default function AboutPage() {
 
                     <div>
                       <h4 className="font-medium text-sm">Tehlikeli Viraj</h4>
-                      <p className="text-xs text-gray-500">Aracın savrulma ve yön değişimi sürecinin tehlikeli şekilde gerçekleştirilmesini ifade etmektedir. (Senaryo Şartları; Araç Hızı > 70 km/s, Yön Değişimi > 45 derece, İşlem Süreci =5 sn, gForce> 1,5 g yatay ivme) (Maliyet)</p>
+                      <p className="text-xs text-gray-500">Aracın savrulma ve yön değişimi sürecinin tehlikeli şekilde gerçekleştirilmesini ifade etmektedir. (Senaryo Şartları; Araç Hızı &gt; 70 km/s, Yön Değişimi &gt; 45 derece, İşlem Süreci =5 sn, gForce &gt; 1,5 g yatay ivme) (Maliyet)</p>
                     </div>
                   </div>
                 </div>
