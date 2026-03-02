@@ -445,6 +445,29 @@ export default function HierarchicalComparisonPage() {
                   Sonraki Adım
                 </Button>
               </div>
+
+              {/* Tüm adımlar tamamlandığında sayfa altında kaydet ve devam et */}
+              {allStepsCompleted() && (
+                <Card className="border-green-200 bg-green-50/50">
+                  <CardContent className="pt-6">
+                    <p className="text-sm text-gray-700 mb-4 text-center">
+                      Tüm karşılaştırmalar tamamlandı. Değerlendirmenizi kaydedip Toplu Ağırlıklar sayfasına geçebilirsiniz.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <Button onClick={saveEvaluation} disabled={isSaving} variant="outline" size="lg" className="bg-white">
+                        <Save className="h-4 w-4 mr-2" />
+                        {isSaving ? "Kaydediliyor..." : "Değerlendirmeyi Kaydet"}
+                      </Button>
+                      <Link href="/collective-weights">
+                        <Button size="lg">
+                          <User className="h-4 w-4 mr-2" />
+                          Toplu Ağırlıklar
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         </div>
