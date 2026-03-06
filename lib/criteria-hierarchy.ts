@@ -121,7 +121,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
     isLeaf: true,
     type: "cost",
     description: "Ölümle sonuçlanan kaza sayısı",
-    excelAliases: ["Ölümle Sonuçlanan Kaza"],
+    excelAliases: ["Ölümle Sonuçlanan Kaza", "Ölümlü Kaza Sayısı"],
   },
   injury_accident: {
     id: "injury_accident",
@@ -132,7 +132,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
     isLeaf: true,
     type: "cost",
     description: "Yaralanma ile sonuçlanan kaza sayısı",
-    excelAliases: ["Yaralanmalı Kaza"],
+    excelAliases: ["Yaralanmalı Kaza", "Yaralanmalı Kaza Sayısı"],
   },
   material_damage_accident: {
     id: "material_damage_accident",
@@ -143,7 +143,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
     isLeaf: true,
     type: "cost",
     description: "Sadece maddi hasarla sonuçlanan kaza sayısı",
-    excelAliases: ["Maddi Hasarlı Kaza"],
+    excelAliases: ["Maddi Hasarlı Kaza", "Maddi Hasarlı Kaza Sayısı"],
   },
 
   // Disiplin Ceza Alt Kriterleri (Seviye 3)
@@ -156,7 +156,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
     isLeaf: true,
     type: "cost",
     description: "En hafif disiplin ihlali cezası sayısı",
-    excelAliases: ["1. Derece Disiplin İhlali Cezası", "1'nci Derece Disiplin İhlali Cezası"],
+    excelAliases: ["1. Derece Disiplin İhlali Cezası", "1'nci Derece Disiplin İhlali Cezası", "1. Derce Disiplin Cezası"],
   },
   second_degree_penalty: {
     id: "second_degree_penalty",
@@ -167,7 +167,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
     isLeaf: true,
     type: "cost",
     description: "Orta düzey disiplin ihlali cezası sayısı",
-    excelAliases: ["2. Derece Disiplin İhlali Cezası", "2'nci Derece Disiplin İhlali Cezası"],
+    excelAliases: ["2. Derece Disiplin İhlali Cezası", "2'nci Derece Disiplin İhlali Cezası", "2. Derce Disiplin Cezası"],
   },
   third_degree_penalty: {
     id: "third_degree_penalty",
@@ -182,6 +182,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
       "3. Derece Disiplin İhlali Cezası",
       "3'ncü Derece Disiplin İhlali Cezası",
       "3'nci Derece Disiplin İhlali Cezası",
+      "3. Derce Disiplin Cezası",
     ],
   },
   fourth_degree_penalty: {
@@ -197,6 +198,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
       "4. Derece Disiplin İhlali Cezası",
       "4'ncü Derece Disiplin İhlali Cezası",
       "4'nci Derece Disiplin İhlali Cezası",
+      "4. Derce Disiplin Cezası",
     ],
   },
 
@@ -243,7 +245,7 @@ export const criteriaHierarchy: Record<string, Criterion> = {
     isLeaf: true,
     type: "cost",
     description: "Motor Arıza (Kırmızı) Lambası ciddi motor arızasının göstergesidir. Kılavuzlarda \"bu lamba yandığında trafik kontrol edilerek aracın sağ tarafa parkı gerçekleştirilmeli ve servise haber verilmelidir\" deniliyor. (İhlal Şartları; 120 sn boyunca Lamba aktif olacak + en az 250 metre yolculuk yapılmış olacaktır.)",
-    excelAliases: ["Kırmızı Lamba Uyarısı", "KırmızıLambaUyarısı", "Motor Arıza Lambası", "MotorArızaLambası", "Motor (Kırmızı Lamba) Uyarısı"],
+    excelAliases: ["Kırmızı Lamba Uyarısı", "KırmızıLambaUyarısı", "Kırmızı Lamba", "Motor Arıza Lambası", "MotorArızaLambası", "Motor (Kırmızı Lamba) Uyarısı"],
   },
   idle_violation: {
     id: "idle_violation",

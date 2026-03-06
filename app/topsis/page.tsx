@@ -130,9 +130,10 @@ export default function TOPSISPage() {
     setError(null)
 
     try {
-      // Excel'den sürücü isimlerini al (ilk sütun genellikle Sicil No)
-      const firstColumnKey = Object.keys(driverData[0])[0]
-      const alternatives = driverData.map((driver) => String(driver[firstColumnKey] || ""))
+      // Excel'den sürücü isimlerini al: "Sicil" varsa onu kullan, yoksa ilk sütunu kullan
+      const allKeys = Object.keys(driverData[0])
+      const driverIdKey = allKeys.find((k) => k.trim() === "Sicil") ?? allKeys[0]
+      const alternatives = driverData.map((driver) => String(driver[driverIdKey] || ""))
 
       // Kriter isimlerini ve tiplerini al
       const criteriaNames: string[] = []
@@ -155,9 +156,10 @@ export default function TOPSISPage() {
         const row: number[] = []
         let distanceTraveled = 0
 
-        // Sürücü ID'sini al (Sicil No)
-        const firstColumnKey = Object.keys(driver)[0]
-        const driverID = String(driver[firstColumnKey] || "")
+        // Sürücü ID'sini al (Sicil sütunu varsa onu kullan)
+        const rowKeys = Object.keys(driver)
+        const idKey = rowKeys.find((k) => k.trim() === "Sicil") ?? rowKeys[0]
+        const driverID = String(driver[idKey] || "")
 
         // İlk sürücü için tüm sütun isimlerini logla
         if (driverIndex === 0) {
@@ -165,46 +167,33 @@ export default function TOPSISPage() {
           console.log("🔍 Beklenen kriter sayısı:", leafCriteria.filter(c => averageWeights[c.id]).length)
         }
 
-        // Çalışılan Saat/km verisini bul - önce tam eşleşme ara
+        // Çalışılan Saat/km verisini bul (beraberlik kırıcı için)
         const exactKeys = Object.keys(driver).filter(
-          (key) => key.trim().toLowerCase() === "çalışılan saat/km" || key.trim().toLowerCase() === "çalışılan st/km"
+          (key) => {
+            const k = key.trim().toLowerCase()
+            return k === "çalışılan saat/km" || k === "çalışılan st/km" || k === "toplam_calisma_saati" || k === "km"
+          }
         )
-        
         if (exactKeys.length > 0) {
           distanceTraveled = Number(driver[exactKeys[0]]) || 0
-          if (driverIndex === 0) {
-            console.log("✅ Tam eşleşme bulundu:", exactKeys[0], "=", distanceTraveled)
-          }
+          if (driverIndex === 0) console.log("✅ Çalışma/saat sütunu:", exactKeys[0], "=", distanceTraveled)
         } else {
-          // Kısmi eşleşme ara
           const partialKeys = Object.keys(driver).filter(
-            (key) => key.toLowerCase().includes("çalışılan saat/km") || key.toLowerCase().includes("çalışılan st/km") || 
-                     key.toLowerCase().includes("çalışılan saat") || key.toLowerCase().includes("çalışılan st")
+            (key) => {
+              const k = key.toLowerCase()
+              return k.includes("çalışılan saat/km") || k.includes("çalışılan st/km") || k.includes("toplam_calisma_saati") ||
+                     k.includes("çalışılan saat") || k.includes("çalışılan st") || k === "km"
+            }
           )
-          
           if (partialKeys.length > 0) {
             distanceTraveled = Number(driver[partialKeys[0]]) || 0
-            if (driverIndex === 0) {
-              console.log("✅ Kısmi eşleşme bulundu:", partialKeys[0], "=", distanceTraveled)
-            }
+            if (driverIndex === 0) console.log("✅ Çalışma/saat (kısmi):", partialKeys[0], "=", distanceTraveled)
           } else {
-            // Fallback: saat içeren sütunları ara (km içerenleri de dahil et)
             const fallbackKeys = Object.keys(driver).filter(
-              (key) => (key.toLowerCase().includes("saat") || key.toLowerCase().includes("st")) &&
+              (key) => (key.toLowerCase().includes("saat") || key.toLowerCase().includes("st") || key.toLowerCase() === "km") &&
                        !key.toLowerCase().includes("oran") && !key.toLowerCase().includes("ratio")
             )
-            
-            if (fallbackKeys.length > 0) {
-              distanceTraveled = Number(driver[fallbackKeys[0]]) || 0
-              if (driverIndex === 0) {
-                console.log("⚠️ Fallback eşleşme bulundu:", fallbackKeys[0], "=", distanceTraveled)
-              }
-            } else {
-              if (driverIndex === 0) {
-                console.log("❌ Çalışılan saat/km sütunu bulunamadı!")
-                console.log("🔍 Mevcut sütunlar:", Object.keys(driver))
-              }
-            }
+            if (fallbackKeys.length > 0) distanceTraveled = Number(driver[fallbackKeys[0]]) || 0
           }
         }
         
