@@ -11,6 +11,7 @@ export interface TOPSISResult {
   closenessCoefficient: number
   rank: number
   distanceTraveled?: number
+  workHours?: number
 }
 
 export interface TOPSISDetailedResult {

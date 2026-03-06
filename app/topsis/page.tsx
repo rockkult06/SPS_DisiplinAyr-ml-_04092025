@@ -150,11 +150,13 @@ export default function TOPSISPage() {
 
              // Excel verilerinden kriter değerlerini çıkar
        const matrix: number[][] = []
-       const distanceData: Record<string, number> = {}
+       const kmData: Record<string, number> = {}
+       const workHoursData: Record<string, number> = {}
 
       driverData.forEach((driver, driverIndex) => {
         const row: number[] = []
-        let distanceTraveled = 0
+        let kmTraveled = 0
+        let workHours = 0
 
         // Sürücü ID'sini al (Sicil sütunu varsa onu kullan)
         const rowKeys = Object.keys(driver)
@@ -167,38 +169,33 @@ export default function TOPSISPage() {
           console.log("🔍 Beklenen kriter sayısı:", leafCriteria.filter(c => averageWeights[c.id]).length)
         }
 
-        // Çalışılan Saat/km verisini bul (beraberlik kırıcı için)
-        const exactKeys = Object.keys(driver).filter(
-          (key) => {
-            const k = key.trim().toLowerCase()
-            return k === "çalışılan saat/km" || k === "çalışılan st/km" || k === "toplam_calisma_saati" || k === "km"
-          }
-        )
-        if (exactKeys.length > 0) {
-          distanceTraveled = Number(driver[exactKeys[0]]) || 0
-          if (driverIndex === 0) console.log("✅ Çalışma/saat sütunu:", exactKeys[0], "=", distanceTraveled)
-        } else {
-          const partialKeys = Object.keys(driver).filter(
-            (key) => {
-              const k = key.toLowerCase()
-              return k.includes("çalışılan saat/km") || k.includes("çalışılan st/km") || k.includes("toplam_calisma_saati") ||
-                     k.includes("çalışılan saat") || k.includes("çalışılan st") || k === "km"
-            }
-          )
-          if (partialKeys.length > 0) {
-            distanceTraveled = Number(driver[partialKeys[0]]) || 0
-            if (driverIndex === 0) console.log("✅ Çalışma/saat (kısmi):", partialKeys[0], "=", distanceTraveled)
-          } else {
-            const fallbackKeys = Object.keys(driver).filter(
-              (key) => (key.toLowerCase().includes("saat") || key.toLowerCase().includes("st") || key.toLowerCase() === "km") &&
-                       !key.toLowerCase().includes("oran") && !key.toLowerCase().includes("ratio")
-            )
-            if (fallbackKeys.length > 0) distanceTraveled = Number(driver[fallbackKeys[0]]) || 0
-          }
+        // Yapılan Km verisini bul (beraberlik kırıcı + sonuç tablosu)
+        const kmKey =
+          Object.keys(driver).find((k) => k.trim().toUpperCase() === "KM") ??
+          Object.keys(driver).find((k) => k.trim().toLowerCase() === "yapılan km") ??
+          null
+        if (kmKey) {
+          kmTraveled = Number(driver[kmKey]) || 0
         }
-        
-        // Sürücü ID'sine göre map'e ekle
-        distanceData[driverID] = distanceTraveled
+
+        // TOPLAM_CALISMA_SAATI (çalışma saati) verisini bul
+        const workHoursKey =
+          Object.keys(driver).find((k) => k.trim().toUpperCase() === "TOPLAM_CALISMA_SAATI") ??
+          Object.keys(driver).find((k) => k.trim().toLowerCase().includes("çalışılan saat")) ??
+          Object.keys(driver).find((k) => k.trim().toLowerCase().includes("çalışılan st")) ??
+          null
+        if (workHoursKey) {
+          workHours = Number(driver[workHoursKey]) || 0
+        }
+
+        if (driverIndex === 0) {
+          console.log("✅ Yapılan Km:", kmKey, "=", kmTraveled)
+          console.log("✅ Çalışma Saati:", workHoursKey, "=", workHours)
+        }
+
+        // Sürücü ID'sine göre map'lere ekle
+        kmData[driverID] = kmTraveled
+        workHoursData[driverID] = workHours
 
         // Her kriter için Excel'den değer bul
         leafCriteria.forEach((criterion) => {
@@ -300,11 +297,14 @@ export default function TOPSISPage() {
          criteriaTypes,
        })
 
-       // Kilometre verisi ile tie-breaking uygula
-       const finalResults = addDistanceDataToResults(topsisDetailed.results, distanceData)
+      // Yapılan KM verisi ile tie-breaking uygula
+      const finalResults = addDistanceDataToResults(topsisDetailed.results, kmData).map((r) => ({
+        ...r,
+        workHours: workHoursData[r.alternative] || 0,
+      }))
 
        setDetailedResults(topsisDetailed)
-       setResults(finalResults)
+      setResults(finalResults)
        setIsAnalysisComplete(true)
     } catch (error) {
       console.error("TOPSIS analizi hatası:", error)
@@ -325,16 +325,17 @@ export default function TOPSISPage() {
 
       // 1. Ana sonuçlar sayfası
       const wsData = [
-        ["Sıra", "Sürücü", "TOPSIS Puanı", "Çalışılan Saat/km"],
+        ["Sıra", "Sürücü", "TOPSIS Puanı", "Yapılan Km", "Çalışma Saati"],
         ...results.map((result) => [
           result.rank,
           result.alternative,
           result.closenessCoefficient.toFixed(8),
           result.distanceTraveled || 0,
+          result.workHours || 0,
         ]),
       ]
       const ws = XLSX.utils.aoa_to_sheet(wsData)
-      ws["!cols"] = [{ wch: 8 }, { wch: 15 }, { wch: 15 }, { wch: 12 }]
+      ws["!cols"] = [{ wch: 8 }, { wch: 15 }, { wch: 15 }, { wch: 12 }, { wch: 14 }]
       XLSX.utils.book_append_sheet(wb, ws, "TOPSIS Sonuçları")
 
       // 2. Kriter ağırlıkları sayfası
@@ -542,8 +543,7 @@ export default function TOPSISPage() {
                   TOPSIS Analiz Sonuçları
                 </CardTitle>
                 <CardDescription>
-                                     Sürücü performans sıralaması (Aynı puana sahip sürücüler arasında çalışılan saat verisi yüksek olan
-                   üst sırada yer alır)
+                  Sürücü performans sıralaması (Aynı puana sahip sürücüler arasında yapılan km verisi yüksek olan üst sırada yer alır)
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -554,7 +554,8 @@ export default function TOPSISPage() {
                         <TableHead className="w-16">Sıra</TableHead>
                         <TableHead>Sürücü</TableHead>
                         <TableHead>TOPSIS Puanı</TableHead>
-                        <TableHead>Çalışılan Saat/km</TableHead>
+                        <TableHead>Yapılan Km</TableHead>
+                        <TableHead>Çalışma Saati</TableHead>
                         <TableHead>Performans</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -580,6 +581,7 @@ export default function TOPSISPage() {
                           <TableCell className="font-medium">{result.alternative}</TableCell>
                           <TableCell>{result.closenessCoefficient.toFixed(4)}</TableCell>
                           <TableCell>{result.distanceTraveled || 0}</TableCell>
+                          <TableCell>{result.workHours || 0}</TableCell>
                           <TableCell>
                             <Badge variant={result.rank <= 3 ? "default" : result.rank <= 10 ? "secondary" : "outline"}>
                               {result.rank <= 3 ? "Mükemmel" : result.rank <= 10 ? "İyi" : "Ortalama"}
